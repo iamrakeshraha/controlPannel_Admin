@@ -2,7 +2,7 @@ import './App.css';
 
 //components
 import Header from './components/headers/Header'
-import SignUp from './components/signUp';
+import SignUp from './components/SignUp';
 
 function App() {
   return (
