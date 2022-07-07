@@ -3,14 +3,87 @@ import { Button, Card, Col, Input, Row, Select, Tabs, Upload } from "antd";
 import PhoneInput from "react-phone-input-2";
 
 class SignUp extends Component {
+  state = {
+    firstname: "",
+    lastname: "",
+    gender: "1",
+    role: "3",
+    email: "",
+    mobile_phone: "",
+    password: "",
+    status: "0",
+  };
+
+  handleChange = (e) => {
+    const { name, value } = e.target;
+    this.setState({ [name]: value });
+  };
+  selectHandleChange = (name, e) => {
+    this.setState({ [name]: e });
+  };
+  passHandle = (e) => {
+    const { name, value } = e.target;
+
+    var passw = /^[a-zA-Z0-9]*$/;
+
+    if (value.length > 0 && value.match(passw)) {
+      console.log("Correct, try another...");
+      this.setState({ [name]: value });
+      // return true;
+    } else {
+      console.warn("Wrong...!");
+      console.log("length>",value.length);
+      // return false;
+    }
+    // console.warn("wrong hit",value);
+  };
+  validate = () => {
+    const {password} = this.state
+
+    var decimal=  /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{8,15}$/;
+
+    if(!password){
+      alert("Please enter password")
+    } else if(password.length < 8 || password.length > 15){
+      alert("Password between 8 to 15 characters")
+    } else if(!password.match(decimal)){
+      alert("Enter at least one lowercase letter, one uppercase letter, one numeric digit, and one special character")
+    }else{
+      alert("Validate complete")
+    }
+  }
+
+  onSubmitButton = () => {
+    this.validate()
+    // console.log(this.state);
+  };
+
   render() {
+    const {
+      firstname,
+      lastname,
+      gender,
+      role,
+      email,
+      mobile_phone,
+      password,
+      status,
+    } = this.state;
+
     return (
       <Fragment>
         <Row justify="center" align="center" gutter={[0, 16]}>
           <Col xs={12}>
             <Card bordered>
               <Row gutter={[0, 16]}>
-                <Col xs={24} style={{ fontSize: 24, fontWeight: "bold", textAlign: "left" }}>
+                <Col
+                  xs={24}
+                  style={{
+                    fontSize: 24,
+                    fontWeight: "bold",
+                    textAlign: "left",
+                  }}
+                >
                   Create User
                 </Col>
                 <Col xs={24}>
@@ -23,17 +96,17 @@ class SignUp extends Component {
                               <Input
                                 name="firstname"
                                 type="text"
-                                //   value={formValues.firstname}
+                                value={firstname}
                                 placeholder="Firts Name*"
-                                //   onChange={handleChange}
+                                onChange={this.handleChange}
                               />
                             </Col>
                             <Col xs={24} lg={12}>
                               <Input
                                 name="lastname"
-                                //   value={formValues.lastname}
+                                value={lastname}
                                 placeholder="Last Name*"
-                                //   onChange={handleChange}
+                                onChange={this.handleChange}
                               />
                             </Col>
                           </Row>
@@ -58,7 +131,7 @@ class SignUp extends Component {
                               <Select
                                 showSearch
                                 style={{ width: "100%", textAlign: "left" }}
-                                //   value={formValues.gender}
+                                value={gender}
                                 placeholder="Gender*"
                                 optionFilterProp="children"
                                 filterOption={(input, option) =>
@@ -66,11 +139,13 @@ class SignUp extends Component {
                                     .toLowerCase()
                                     .indexOf(input.toLowerCase()) >= 0
                                 }
-                                //   onChange={(e) => selectHandleChange(e, 'gender')}
+                                onChange={(e) =>
+                                  this.selectHandleChange("gender", e)
+                                }
                               >
                                 <Select.Option value="1">Male</Select.Option>
-                                <Select.Option value="0">Female</Select.Option>
-                                <Select.Option value="2">Others</Select.Option>
+                                <Select.Option value="2">Female</Select.Option>
+                                <Select.Option value="0">Others</Select.Option>
                               </Select>
                             </Col>
                             <Col xs={24} lg={12}>
@@ -78,8 +153,10 @@ class SignUp extends Component {
                                 style={{ width: "100%", textAlign: "left" }}
                                 name="role"
                                 placeholder="Select Role*"
-                                //   onChange={(e) => selectHandleChange(e, 'role')}
-                                //   value={formValues.role}
+                                value={role}
+                                onChange={(e) =>
+                                  this.selectHandleChange("role", e)
+                                }
                               >
                                 <Select.Option value="1">
                                   Super Admin
@@ -106,8 +183,8 @@ class SignUp extends Component {
                               <Input
                                 name="email"
                                 placeholder="E-mail*"
-                                //   value={formValues.email}
-                                //   onChange={handleChange}
+                                value={email}
+                                onChange={this.handleChange}
                               />
                             </Col>
                             <Col xs={24} md={24} lg={12}>
@@ -121,8 +198,10 @@ class SignUp extends Component {
                                 international
                                 country={"us"}
                                 name="mobile_phone"
-                                //   value={initialData.mobile_phone}
-                                //   onChange={(e) => mobileHandleChange("mobile_phone", e)}
+                                value={mobile_phone}
+                                onChange={(e) =>
+                                  this.selectHandleChange("mobile_phone", e)
+                                }
                               />
                             </Col>
                           </Row>
@@ -141,12 +220,13 @@ class SignUp extends Component {
                         </Col>
                         <Col xs={24}>
                           <Row gutter={[6, 16]}>
-                          <Col xs={24} lg={12}>
+                            <Col xs={24} lg={12}>
                               <Input
                                 name="password"
-                                //   value={formValues.lastname}
+                                value={password}
                                 placeholder="Password*"
-                                //   onChange={handleChange}
+                                onChange={this.handleChange}
+                                // onChange={this.passHandle}
                               />
                             </Col>
                             <Col xs={24} lg={12}>
@@ -154,32 +234,21 @@ class SignUp extends Component {
                                 style={{ width: "100%", textAlign: "left" }}
                                 name="status"
                                 placeholder="Status*"
-                                //   onChange={(e) => selectHandleChange(e, 'role')}
-                                //   value={formValues.role}
+                                onChange={(e) =>
+                                  this.selectHandleChange("role", e)
+                                }
+                                value={status}
                               >
                                 {/* <Select.Option value="">
                                   Please Select status
                                 </Select.Option> */}
-                                <Select.Option value="active">
-                                  Active
-                                </Select.Option>
-                                <Select.Option value="inactive">
+                                <Select.Option value="1">Active</Select.Option>
+                                <Select.Option value="0">
                                   Inactive
                                 </Select.Option>
                               </Select>
                             </Col>
                           </Row>
-                        </Col>
-                        <Col xs={24}>
-                          <Row gutter={[6, 16]}>
-                            <Col xs={24} lg={12}>
-                              {/* <h4 style={{ color: 'red' }}>{formErrors.role}</h4> */}
-                            </Col>
-                          </Row>
-                        </Col>
-
-                        <Col xs={24}>
-                          {/* <h4 style={{ color: 'red' }}>{formErrors.note}</h4> */}
                         </Col>
 
                         <Col xs={24}>
@@ -199,7 +268,7 @@ class SignUp extends Component {
                                 type="primary"
                                 size="large"
                                 block
-                                //   onClick={loading ? <Spin indicator={antIcon}/> : onSubmitButton}
+                                onClick={this.onSubmitButton}
                               >
                                 Save
                               </Button>
