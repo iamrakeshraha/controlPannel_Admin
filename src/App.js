@@ -1,12 +1,10 @@
 import { Fragment } from "react";
-import { Routes, Route, BrowserRouter, Redirect } from "react-router-dom";
+import { Routes, Route} from "react-router-dom";
 import "./App.css";
-import Dashboard from "./pages/Dashboard";
-import Login from "./pages/Login";
 
 //components
-// import Header from './components/headers/Header'
-import SignUp from "./pages/SignUp";
+import Dashboard from "./pages/Dashboard";
+import Login from "./pages/Login";
 
 function App() {
   const token = 1;
@@ -17,12 +15,6 @@ function App() {
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="*" element={<Login />} />
-
-          {/* <Route
-            render={() => {
-              return <Redirect to={<Login />} />;
-            }}
-          /> */}
         </Routes>
       </Fragment>
     );
